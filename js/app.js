@@ -633,6 +633,7 @@ function addCustom() {
   saveCustom(activeType);
   clearForm();
   buildList();
+  generatePreview();
 }
 
 function editCustom(id) {
