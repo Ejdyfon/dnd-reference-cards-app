@@ -311,7 +311,7 @@ function generatePreview() {
   const { pages, physicalCards, isMonster } = layoutPreview('sequential');
 
   const sizeNote = isMonster
-    ? 'Monster cards print 2-up (~95×135&nbsp;mm) on A4.'
+    ? 'Monster cards print 4-up (2×2, ~95×135&nbsp;mm) on A4.'
     : 'Sleeve cards print 3×3 (64×89&nbsp;mm) on A4.';
 
   printHint.innerHTML = `

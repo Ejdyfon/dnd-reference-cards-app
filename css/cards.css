@@ -434,16 +434,21 @@
     padding: 0;
     margin: 0;
     background: white;
-    /* Center 192mm grid in 194mm printable width so duplex flip stays aligned */
+    width: 100%;
+    /* Fill printable area (A4 − 8mm×2) so leftover space centers on both axes */
+    min-height: 281mm;
+    box-sizing: border-box;
+    /* Sleeve: 192×267mm grid in 194×281mm → ~1mm L/R, ~7mm T/B */
     justify-content: center;
     align-content: center;
   }
   .card-sheet.monster-sheet {
-    grid-template-columns: 95mm;
+    /* 2×2: 190×270mm grid in 194×281mm → ~2mm L/R, ~5.5mm T/B */
+    grid-template-columns: repeat(2, 95mm);
     grid-auto-rows: 135mm;
+    gap: 0;
     justify-content: center;
     align-content: center;
-    row-gap: 4mm;
   }
   .card-sheet-backs {
     display: grid;
