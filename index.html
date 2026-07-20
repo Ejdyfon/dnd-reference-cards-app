@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D Spell Cards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/cards.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ── Top bar ────────────────────────────────────────────── -->
+  <div class="top-bar no-print">
+    <h1>D&amp;D Spell Cards</h1>
+    <div class="controls">
+      <!-- Class selector -->
+      <div class="control-group">
+        <label for="class-select">Class</label>
+        <div class="class-select-wrapper">
+          <span class="class-color-dot" id="class-color-dot" style="background:#5B2D82;"></span>
+          <select id="class-select"></select>
+        </div>
+      </div>
+      <button class="btn" id="btn-load">Load Spellbook</button>
+
+      <!-- Search -->
+      <div class="control-group">
+        <label for="search-input">Search spells</label>
+        <div class="search-row">
+          <input type="search" id="search-input" placeholder="e.g. Fireball…">
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <button class="btn" id="btn-preview">Preview Cards</button>
+      <button class="btn btn-print" id="btn-print">🖨 Print</button>
+    </div>
+  </div>
+
+  <!-- ── Main layout ─────────────────────────────────────────── -->
+  <div class="main-layout">
+
+    <!-- ── Sidebar ─────────────────────────────────────────── -->
+    <div class="sidebar no-print">
+
+      <!-- Spell list controls -->
+      <div class="sidebar-section">
+        <div class="spell-list-header">
+          <h3>Spells</h3>
+          <span class="spell-count" id="spell-count">0 selected</span>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-secondary" id="btn-select-all" style="flex:1;font-size:8pt;padding:4px 8px;">All</button>
+          <button class="btn btn-secondary" id="btn-select-none" style="flex:1;font-size:8pt;padding:4px 8px;">None</button>
+        </div>
+      </div>
+
+      <!-- Spell list -->
+      <div class="spell-list" id="spell-list-content">
+        <div class="loading-spinner" style="color:#5a4a3a;">Load a class spellbook or search for spells.</div>
+      </div>
+
+      <!-- Custom spell form -->
+      <div class="custom-form-wrap">
+        <button class="custom-form-toggle" id="custom-form-toggle">
+          ✦ Create Custom Spell
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <form class="custom-form" id="custom-form" style="display:none;" onsubmit="return false;">
+
+          <div class="form-field">
+            <label for="cf-name">Spell Name *</label>
+            <input type="text" id="cf-name" placeholder="My Awesome Spell">
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-level">Level</label>
+              <select id="cf-level">
+                <option value="0">Cantrip</option>
+                <option value="1">1st</option>
+                <option value="2">2nd</option>
+                <option value="3">3rd</option>
+                <option value="4">4th</option>
+                <option value="5">5th</option>
+                <option value="6">6th</option>
+                <option value="7">7th</option>
+                <option value="8">8th</option>
+                <option value="9">9th</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="cf-school">School</label>
+              <select id="cf-school">
+                <option>Abjuration</option>
+                <option>Conjuration</option>
+                <option>Divination</option>
+                <option>Enchantment</option>
+                <option selected>Evocation</option>
+                <option>Illusion</option>
+                <option>Necromancy</option>
+                <option>Transmutation</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-range">Range</label>
+              <input type="text" id="cf-range" placeholder="60 feet">
+            </div>
+            <div class="form-field">
+              <label for="cf-casttime">Casting Time</label>
+              <input type="text" id="cf-casttime" value="Action">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="cf-duration">Duration</label>
+            <input type="text" id="cf-duration" value="Instantaneous">
+          </div>
+
+          <div class="form-field">
+            <label>Components</label>
+            <div class="components-row">
+              <label><input type="checkbox" id="cf-verbal"> V</label>
+              <label><input type="checkbox" id="cf-somatic"> S</label>
+              <label><input type="checkbox" id="cf-material"> M</label>
+              <input type="text" id="cf-material-text" placeholder="material description" style="flex:1;display:none;">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Properties</label>
+            <div class="components-row">
+              <label><input type="checkbox" id="cf-concentration"> Concentration</label>
+              <label><input type="checkbox" id="cf-ritual"> Ritual</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="cf-desc">Description * <small style="font-variant:normal;font-size:7pt;">(supports **bold**, *italic*)</small></label>
+            <textarea id="cf-desc" placeholder="Describe the spell effect…" rows="4"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="cf-higher">At Higher Levels / Cantrip Upgrades</label>
+            <textarea id="cf-higher" placeholder="Optional scaling text…" rows="2"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-class">Class (sets accent color)</label>
+              <select id="cf-class"></select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Custom Accent Color Override</label>
+            <div class="color-row">
+              <input type="checkbox" id="cf-color-override" style="accent-color:#9b6fd0;">
+              <label for="cf-color-override" style="font-size:9pt;cursor:pointer;">Use custom color</label>
+              <input type="color" id="cf-color" value="#5B2D82">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn" id="cf-submit" type="button">Add to Print Queue</button>
+            <button class="btn btn-secondary" id="cf-clear" type="button">Clear</button>
+          </div>
+
+        </form>
+      </div><!-- /custom-form-wrap -->
+
+    </div><!-- /sidebar -->
+
+    <!-- ── Preview area ─────────────────────────────────────── -->
+    <div class="preview-area">
+      <div class="preview-empty" id="preview-empty">
+        Select spells and click Preview Cards
+      </div>
+      <div class="card-sheet" id="card-sheet"></div>
+    </div>
+
+  </div><!-- /main-layout -->
+
+  <footer class="no-print" style="
+    background:#2a1f14;
+    border-top:1px solid #3a2a1a;
+    padding:6px 24px;
+    font-size:7.5pt;
+    color:#5a4a3a;
+    text-align:right;
+  ">
+    Spell data: <a href="https://open5e.com" target="_blank" style="color:#7a6858;">Open5e</a>
+    · System Reference Document 5.2 (2024) · CC-BY 4.0
+  </footer>
+
+</div><!-- /app -->
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

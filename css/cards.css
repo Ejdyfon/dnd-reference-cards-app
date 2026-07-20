@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* ── Card shell ─────────────────────────────────────────────── */
+.spell-card {
+  --card-accent: #5B2D82;
+  --card-accent-light: #5B2D8222;
+
+  position: relative;
+  width: 2.5in;
+  height: 3.5in;
+  background: #FDF5E6;
+  color: #1a1a1a;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 9pt;
+  line-height: 1.35;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0.18in 0.17in 0.15in;
+  border: 2.5px double var(--card-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Corner ornaments ────────────────────────────────────────── */
+.card-corners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.corner {
+  position: absolute;
+  color: var(--card-accent);
+  font-size: 8pt;
+  line-height: 1;
+}
+.corner.tl { top: 3px; left: 5px; }
+.corner.tr { top: 3px; right: 5px; }
+.corner.bl { bottom: 3px; left: 5px; }
+.corner.br { bottom: 3px; right: 5px; }
+
+/* ── Header ──────────────────────────────────────────────────── */
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 5px;
+}
+
+.header-class {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 36px;
+}
+.class-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--card-accent);
+}
+.class-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.class-name {
+  font-size: 6.5pt;
+  font-variant: small-caps;
+  color: var(--card-accent);
+  text-align: center;
+  margin-top: 1px;
+  line-height: 1;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  padding: 0 4px;
+}
+.spell-name {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 15pt;
+  color: #1a1a1a;
+  line-height: 1.1;
+  word-break: break-word;
+}
+.badge {
+  display: inline-block;
+  background: var(--card-accent);
+  color: #FDF5E6;
+  border-radius: 50%;
+  width: 13px;
+  height: 13px;
+  font-size: 7pt;
+  font-weight: bold;
+  line-height: 13px;
+  text-align: center;
+  margin: 1px 1px 0;
+  font-family: sans-serif;
+}
+
+.header-level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+}
+.level-icon {
+  color: var(--card-accent);
+  font-size: 14pt;
+  line-height: 1;
+}
+.level-label {
+  font-size: 6.5pt;
+  font-variant: small-caps;
+  color: var(--card-accent);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ── Stats ───────────────────────────────────────────────────── */
+.card-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 2px;
+  margin-bottom: 3px;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.stat-label {
+  font-size: 7pt;
+  font-weight: 600;
+  color: var(--card-accent);
+  line-height: 1;
+}
+.stat-value {
+  font-size: 8.5pt;
+}
+
+.card-components {
+  font-size: 8pt;
+  margin-bottom: 4px;
+}
+
+/* ── Divider ─────────────────────────────────────────────────── */
+.card-divider {
+  display: flex;
+  align-items: center;
+  margin: 3px 0 4px;
+  color: var(--card-accent);
+}
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--card-accent);
+}
+.divider-diamond {
+  margin: 0 4px;
+  font-size: 7pt;
+  line-height: 1;
+}
+
+/* ── Body ────────────────────────────────────────────────────── */
+.card-body {
+  flex: 1;
+  overflow: hidden;
+  font-size: 8.5pt;
+  line-height: 1.35;
+}
+.card-body p {
+  margin: 0 0 3px;
+}
+.card-body ul {
+  margin: 0 0 3px;
+  padding-left: 14px;
+}
+.card-body li {
+  margin-bottom: 1px;
+}
+
+.higher-level-label {
+  font-weight: 600;
+  color: var(--card-accent);
+  margin-top: 4px !important;
+  margin-bottom: 1px !important;
+}
+
+/* ── Continuation header (card 2+) ──────────────────────────── */
+.card-continuation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+.continuation-name {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 11pt;
+}
+.continuation-page {
+  font-size: 7pt;
+  color: var(--card-accent);
+}
+
+/* ── Pagination tabs ─────────────────────────────────────────── */
+.card-continue-tab,
+.card-page-tab {
+  font-size: 6.5pt;
+  color: var(--card-accent);
+  text-align: right;
+  padding: 2px 4px;
+  border-top: 1px solid var(--card-accent);
+  margin-top: auto;
+}
+.card-continue-tab {
+  background: var(--card-accent-light);
+}
+
+/* ── Print layout ────────────────────────────────────────────── */
+@media screen {
+  .card-sheet {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2in;
+    padding: 0.3in;
+    background: #e8e4dc;
+    min-height: 100vh;
+  }
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0.3in;
+  }
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+    margin: 0;
+    padding: 0;
+  }
+  .card-sheet {
+    display: grid;
+    grid-template-columns: repeat(3, 2.5in);
+    gap: 0.15in;
+    padding: 0;
+  }
+  .spell-card {
+    box-shadow: none;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
