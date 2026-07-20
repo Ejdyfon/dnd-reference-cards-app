@@ -270,6 +270,22 @@ select:focus, input:focus {
   letter-spacing: 1px;
 }
 
+.print-hint {
+  margin: 0;
+  padding: 10px 0.3in 12px;
+  font-size: 9pt;
+  line-height: 1.45;
+  color: #6a5a4a;
+  background: #e8e4dc;
+}
+.print-hint ul {
+  margin: 6px 0 0;
+  padding-left: 1.2em;
+}
+.print-hint li {
+  margin-bottom: 2px;
+}
+
 /* ── Custom spell form ───────────────────────────────────────── */
 .custom-form-wrap {
   border-top: 1px solid #3a2a1a;

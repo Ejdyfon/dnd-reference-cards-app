@@ -1,6 +1,6 @@
 import { fetchClassSpells, searchSpells, normalizeSpell, normalizeCustomSpell } from './api.js';
 import { CLASS_LIST, getThemeForClass } from './class-themes.js';
-import { renderSpellCards } from './card-renderer.js';
+import { renderSpellCards, renderCardBack } from './card-renderer.js';
 
 const STORAGE_KEY = 'dnd-custom-spells';
 
@@ -145,16 +145,38 @@ function getSpellById(id) {
   return customSpells.find((s) => s.id === id);
 }
 
+function appendPairedPrintCards(frontsSheet, backsSheet, spellCards, classKey, customAccent) {
+  for (let i = 0; i < spellCards.length; i += 2) {
+    frontsSheet.appendChild(spellCards[i]);
+
+    if (i + 1 < spellCards.length) {
+      // Next continuation page goes on the reverse of the same physical card
+      backsSheet.appendChild(spellCards[i + 1]);
+    } else {
+      // Odd page out — standard class-themed back
+      backsSheet.appendChild(renderCardBack(classKey, customAccent));
+    }
+  }
+}
+
 function generatePreview() {
-  const preview = document.getElementById('card-sheet');
-  preview.innerHTML = '';
+  const fronts = document.getElementById('card-sheet-fronts');
+  const backs = document.getElementById('card-sheet-backs');
+  const printHint = document.getElementById('print-hint');
+  fronts.innerHTML = '';
+  backs.innerHTML = '';
 
   const ids = [...selectedKeys];
   if (ids.length === 0) {
     document.getElementById('preview-empty').style.display = 'flex';
+    printHint.hidden = true;
     return;
   }
   document.getElementById('preview-empty').style.display = 'none';
+  printHint.hidden = false;
+
+  let spellPages = 0;
+  let physicalCards = 0;
 
   for (const id of ids) {
     const spell = getSpellById(id);
@@ -162,9 +184,26 @@ function generatePreview() {
     const classKey = spell.source === 'custom'
       ? (spell.classKey || 'custom')
       : activeClassKey;
-    const cards = renderSpellCards(spell, classKey, spell.customAccent);
-    cards.forEach((c) => preview.appendChild(c));
+    const spellCards = renderSpellCards(spell, classKey, spell.customAccent);
+    spellPages += spellCards.length;
+    physicalCards += Math.ceil(spellCards.length / 2);
+    appendPairedPrintCards(fronts, backs, spellCards, classKey, spell.customAccent);
   }
+
+  printHint.innerHTML = `
+    <strong>Print tips (A4 only)</strong>
+    — this layout uses <strong>${physicalCards} physical card${physicalCards === 1 ? '' : 's'}</strong>
+    for ${spellPages} spell page${spellPages === 1 ? '' : 's'}
+    (multi-page spells are paired front/back to save paper).
+    <ul>
+      <li><strong>Paper:</strong> A4 only (do not use Letter).</li>
+      <li><strong>Margins:</strong> None or Minimum in the browser dialog — the page already uses 8&nbsp;mm. Avoid larger margins or the bottom row may clip.</li>
+      <li><strong>Scale:</strong> 100% / Actual size — never “Fit to page.”</li>
+      <li><strong>Sides:</strong> Double-sided, flip on <strong>long edge</strong>.</li>
+      <li><strong>Background graphics:</strong> On (so parchment and borders print).</li>
+      <li>Cut on card edges after printing; optional: cardstock ~200–250&nbsp;gsm.</li>
+    </ul>
+  `;
 }
 
 async function loadClassSpells() {

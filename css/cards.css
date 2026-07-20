@@ -6,8 +6,13 @@
   --card-accent-light: #5B2D8222;
 
   position: relative;
-  width: 2.5in;
-  height: 3.5in;
+  width: 64mm;
+  height: 89mm;
+  min-width: 64mm;
+  max-width: 64mm;
+  min-height: 89mm;
+  max-height: 89mm;
+  flex-shrink: 0;
   background: #FDF5E6;
   color: #1a1a1a;
   font-family: 'Crimson Text', Georgia, serif;
@@ -75,15 +80,20 @@
 
 .header-title {
   flex: 1;
+  min-width: 0;
   text-align: center;
   padding: 0 4px;
 }
 .spell-name {
   font-family: 'UnifrakturMaguntia', cursive;
-  font-size: 15pt;
+  font-size: 13pt;
   color: #1a1a1a;
-  line-height: 1.1;
-  word-break: break-word;
+  line-height: 1.05;
+  width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
+  max-height: 2.2em;
+  overflow: hidden;
 }
 .badge {
   display: inline-block;
@@ -132,13 +142,13 @@
   flex: 1;
 }
 .stat-label {
-  font-size: 7pt;
+  font-size: 7.5pt;
   font-weight: 600;
   color: var(--card-accent);
   line-height: 1;
 }
 .stat-value {
-  font-size: 8.5pt;
+  font-size: 9pt;
 }
 
 .card-components {
@@ -167,6 +177,7 @@
 /* ── Body ────────────────────────────────────────────────────── */
 .card-body {
   flex: 1;
+  min-height: 0;
   overflow: hidden;
   font-size: 8.5pt;
   line-height: 1.35;
@@ -199,6 +210,9 @@
 .continuation-name {
   font-family: 'UnifrakturMaguntia', cursive;
   font-size: 11pt;
+  overflow-wrap: normal;
+  word-break: normal;
+  max-width: 100%;
 }
 .continuation-page {
   font-size: 7pt;
@@ -219,6 +233,42 @@
   background: var(--card-accent-light);
 }
 
+/* ── Card back ───────────────────────────────────────────────── */
+.spell-card-back {
+  align-items: center;
+  justify-content: center;
+  padding: 0.18in;
+}
+
+.card-back-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 1;
+}
+
+.card-back-icon {
+  width: 22mm;
+  height: 22mm;
+  color: var(--card-accent);
+}
+
+.card-back-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card-back-class {
+  font-size: 14pt;
+  font-variant: small-caps;
+  font-weight: 600;
+  color: var(--card-accent);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
 /* ── Print layout ────────────────────────────────────────────── */
 @media screen {
   .card-sheet {
@@ -229,12 +279,16 @@
     background: #e8e4dc;
     min-height: 100vh;
   }
+
+  .card-sheet-backs {
+    display: none;
+  }
 }
 
 @media print {
   @page {
-    size: letter;
-    margin: 0.3in;
+    size: A4;
+    margin: 8mm;
   }
   .no-print {
     display: none !important;
@@ -244,15 +298,25 @@
     margin: 0;
     padding: 0;
   }
+  #print-area {
+    display: block;
+  }
   .card-sheet {
     display: grid;
-    grid-template-columns: repeat(3, 2.5in);
-    gap: 0.15in;
+    grid-template-columns: repeat(3, 64mm);
+    grid-auto-rows: 89mm;
+    gap: 0;
     padding: 0;
+    background: white;
+  }
+  .card-sheet-backs {
+    display: grid;
+    page-break-before: always;
   }
   .spell-card {
     box-shadow: none;
     page-break-inside: avoid;
     break-inside: avoid;
+    margin: 0;
   }
 }
