@@ -258,6 +258,29 @@ function appendSequentialPreviewCards(frontsSheet, cards) {
   }
 }
 
+/** For duplex long-edge portrait: reverse each grid row so backs align under fronts. */
+function mirrorRowsForDuplex(nodes, cols, { isMonster = false } = {}) {
+  const out = [];
+  for (let i = 0; i < nodes.length; i += cols) {
+    const row = nodes.slice(i, i + cols);
+    while (row.length < cols) row.push(null);
+    row.reverse();
+    for (const n of row) {
+      if (n) {
+        out.push(n);
+      } else {
+        const spacer = document.createElement('div');
+        spacer.className = isMonster
+          ? 'spell-card monster-card print-spacer'
+          : 'spell-card print-spacer';
+        spacer.setAttribute('aria-hidden', 'true');
+        out.push(spacer);
+      }
+    }
+  }
+  return out;
+}
+
 let lastPreviewEntries = [];
 
 function layoutPreview(mode) {
@@ -282,6 +305,13 @@ function layoutPreview(mode) {
     } else {
       appendSequentialPreviewCards(fronts, cards);
     }
+  }
+
+  if (mode === 'duplex') {
+    const cols = isMonster ? 2 : 3;
+    const mirrored = mirrorRowsForDuplex([...backs.children], cols, { isMonster });
+    backs.innerHTML = '';
+    mirrored.forEach((n) => backs.appendChild(n));
   }
 
   return { pages, physicalCards, isMonster };

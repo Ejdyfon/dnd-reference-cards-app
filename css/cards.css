@@ -460,4 +460,10 @@
     break-inside: avoid;
     margin: 0;
   }
+  .print-spacer {
+    visibility: hidden;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
 }
