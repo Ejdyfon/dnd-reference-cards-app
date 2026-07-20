@@ -843,18 +843,8 @@ async function init() {
     if (activeType === 'class-skills') refreshSubclassOptions();
   });
 
-  // Bind load early so clicks during class-list fetch are not lost
+  // Bind interactive UI before any network await so controls work immediately
   document.getElementById('btn-load').addEventListener('click', loadCurrentType);
-  updateControlsForType();
-  buildList();
-
-  try {
-    allClasses = await fetchClasses();
-    refreshSubclassOptions();
-  } catch {
-    /* subclasses optional */
-  }
-
   document.getElementById('search-input').addEventListener('input', () => {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => doSearch(document.getElementById('search-input').value), 400);
@@ -867,14 +857,12 @@ async function init() {
     if (lastPreviewEntries.length) layoutPreview('duplex');
     setTimeout(() => window.print(), 100);
   });
-
   window.addEventListener('beforeprint', () => {
     if (lastPreviewEntries.length) layoutPreview('duplex');
   });
   window.addEventListener('afterprint', () => {
     if (lastPreviewEntries.length) layoutPreview('sequential');
   });
-
   document.getElementById('cf-submit').addEventListener('click', addCustom);
   document.getElementById('cf-clear').addEventListener('click', clearForm);
   const toggle = document.getElementById('custom-form-toggle');
@@ -883,10 +871,19 @@ async function init() {
     const open = toggle.classList.toggle('open');
     form.style.display = open ? 'flex' : 'none';
   });
-
   document.getElementById('cf-spell-material').addEventListener('change', (e) => {
     document.getElementById('cf-spell-material-text').style.display = e.target.checked ? '' : 'none';
   });
+
+  updateControlsForType();
+  buildList();
+
+  try {
+    allClasses = await fetchClasses();
+    refreshSubclassOptions();
+  } catch {
+    /* subclasses optional */
+  }
 
   updateControlsForType();
   // Do not clobber an in-flight Load with an empty list rebuild
