@@ -20,11 +20,7 @@ body {
   background: #2a1f14;
   border-bottom: 2px solid #5B2D82;
   padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  display: block;
 }
 .top-bar h1 {
   margin: 0;
@@ -34,12 +30,84 @@ body {
   letter-spacing: 1px;
 }
 
+.category-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+  margin-top: 4px;
+}
+.category-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #3a2a1a;
+  border: 1px solid #5a4a3a;
+  color: #c0a878;
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 8.5pt;
+  font-variant: small-caps;
+  border-radius: 3px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+}
+.category-btn:hover {
+  background: #4a3a2a;
+  color: #e8e0d0;
+}
+.category-btn.active {
+  background: #5B2D82;
+  border-color: #7c3db5;
+  color: #fff;
+}
+.category-btn .cat-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  color: currentColor;
+}
+.category-btn .cat-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.category-btn.active[data-type="feats"],
+.category-btn.active[data-type="equipment"],
+.category-btn.active[data-type="conditions"],
+.category-btn.active[data-type="magic-items"],
+.category-btn.active[data-type="monsters"] {
+  background: #E34C38;
+  border-color: #f06a55;
+}
+
+.top-bar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.top-bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
 /* ── Controls panel ──────────────────────────────────────────── */
 .controls {
   display: flex;
   gap: 12px;
   align-items: flex-end;
   flex-wrap: wrap;
+}
+.controls .control-group[hidden],
+.controls button[hidden],
+.controls [hidden] {
+  display: none !important;
+}
+.form-panel[hidden] {
+  display: none !important;
 }
 .control-group {
   display: flex;

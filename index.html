@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>D&D Spell Cards</title>
+  <title>D&D Reference Cards</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -13,44 +13,44 @@
 <body>
 <div id="app">
 
-  <!-- ── Top bar ────────────────────────────────────────────── -->
   <div class="top-bar no-print">
-    <h1>D&amp;D Spell Cards</h1>
-    <div class="controls">
-      <!-- Class selector -->
-      <div class="control-group">
-        <label for="class-select">Class</label>
-        <div class="class-select-wrapper">
-          <span class="class-color-dot" id="class-color-dot" style="background:#5B2D82;"></span>
-          <select id="class-select"></select>
+    <div class="top-bar-inner">
+      <div class="top-bar-row">
+        <h1>D&amp;D Reference Cards</h1>
+        <div class="controls" id="top-controls">
+          <div class="control-group" id="ctrl-class" hidden>
+            <label for="class-select">Class</label>
+            <div class="class-select-wrapper">
+              <span class="class-color-dot" id="class-color-dot" style="background:#5B2D82;"></span>
+              <select id="class-select"></select>
+            </div>
+          </div>
+          <div class="control-group" id="ctrl-subclass" hidden>
+            <label for="subclass-select">Subclass</label>
+            <select id="subclass-select">
+              <option value="">Base class only</option>
+            </select>
+          </div>
+          <button class="btn" id="btn-load" hidden>Load</button>
+          <div class="control-group" id="ctrl-search">
+            <label for="search-input" id="search-label">Search</label>
+            <div class="search-row">
+              <input type="search" id="search-input" placeholder="Search…">
+            </div>
+          </div>
+          <button class="btn" id="btn-preview">Preview Cards</button>
+          <button class="btn btn-print" id="btn-print">🖨 Print</button>
         </div>
       </div>
-      <button class="btn" id="btn-load">Load Spellbook</button>
-
-      <!-- Search -->
-      <div class="control-group">
-        <label for="search-input">Search spells</label>
-        <div class="search-row">
-          <input type="search" id="search-input" placeholder="e.g. Fireball…">
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <button class="btn" id="btn-preview">Preview Cards</button>
-      <button class="btn btn-print" id="btn-print">🖨 Print</button>
+      <nav class="category-nav" id="category-nav" aria-label="Card type"></nav>
     </div>
   </div>
 
-  <!-- ── Main layout ─────────────────────────────────────────── -->
   <div class="main-layout">
-
-    <!-- ── Sidebar ─────────────────────────────────────────── -->
     <div class="sidebar no-print">
-
-      <!-- Spell list controls -->
       <div class="sidebar-section">
         <div class="spell-list-header">
-          <h3>Spells</h3>
+          <h3 id="list-title">Spells</h3>
           <span class="spell-count" id="spell-count">0 selected</span>
         </div>
         <div style="display:flex;gap:6px;">
@@ -59,112 +59,266 @@
         </div>
       </div>
 
-      <!-- Spell list -->
       <div class="spell-list" id="spell-list-content">
-        <div class="loading-spinner" style="color:#5a4a3a;">Load a class spellbook or search for spells.</div>
+        <div class="loading-spinner" style="color:#5a4a3a;">Choose a category and load data.</div>
       </div>
 
-      <!-- Custom spell form -->
       <div class="custom-form-wrap">
         <button class="custom-form-toggle" id="custom-form-toggle">
-          ✦ Create Custom Spell
+          ✦ <span id="custom-form-label">Create Custom Spell</span>
           <span class="toggle-arrow">▼</span>
         </button>
         <form class="custom-form" id="custom-form" style="display:none;" onsubmit="return false;">
 
-          <div class="form-field">
-            <label for="cf-name">Spell Name *</label>
-            <input type="text" id="cf-name" placeholder="My Awesome Spell">
-          </div>
-
-          <div class="form-row">
+          <!-- Spells -->
+          <div class="form-panel" data-form="spells">
             <div class="form-field">
-              <label for="cf-level">Level</label>
-              <select id="cf-level">
-                <option value="0">Cantrip</option>
-                <option value="1">1st</option>
-                <option value="2">2nd</option>
-                <option value="3">3rd</option>
-                <option value="4">4th</option>
-                <option value="5">5th</option>
-                <option value="6">6th</option>
-                <option value="7">7th</option>
-                <option value="8">8th</option>
-                <option value="9">9th</option>
-              </select>
+              <label for="cf-spell-name">Spell Name *</label>
+              <input type="text" id="cf-spell-name" placeholder="My Awesome Spell">
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-spell-level">Level</label>
+                <select id="cf-spell-level">
+                  <option value="0">Cantrip</option>
+                  <option value="1">1st</option>
+                  <option value="2">2nd</option>
+                  <option value="3">3rd</option>
+                  <option value="4">4th</option>
+                  <option value="5">5th</option>
+                  <option value="6">6th</option>
+                  <option value="7">7th</option>
+                  <option value="8">8th</option>
+                  <option value="9">9th</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="cf-spell-school">School</label>
+                <select id="cf-spell-school">
+                  <option>Abjuration</option>
+                  <option>Conjuration</option>
+                  <option>Divination</option>
+                  <option>Enchantment</option>
+                  <option selected>Evocation</option>
+                  <option>Illusion</option>
+                  <option>Necromancy</option>
+                  <option>Transmutation</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-spell-range">Range</label>
+                <input type="text" id="cf-spell-range" placeholder="60 feet">
+              </div>
+              <div class="form-field">
+                <label for="cf-spell-casttime">Casting Time</label>
+                <input type="text" id="cf-spell-casttime" value="Action">
+              </div>
             </div>
             <div class="form-field">
-              <label for="cf-school">School</label>
-              <select id="cf-school">
-                <option>Abjuration</option>
-                <option>Conjuration</option>
-                <option>Divination</option>
-                <option>Enchantment</option>
-                <option selected>Evocation</option>
-                <option>Illusion</option>
-                <option>Necromancy</option>
-                <option>Transmutation</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-field">
-              <label for="cf-range">Range</label>
-              <input type="text" id="cf-range" placeholder="60 feet">
+              <label for="cf-spell-duration">Duration</label>
+              <input type="text" id="cf-spell-duration" value="Instantaneous">
             </div>
             <div class="form-field">
-              <label for="cf-casttime">Casting Time</label>
-              <input type="text" id="cf-casttime" value="Action">
+              <label>Components</label>
+              <div class="components-row">
+                <label><input type="checkbox" id="cf-spell-verbal"> V</label>
+                <label><input type="checkbox" id="cf-spell-somatic"> S</label>
+                <label><input type="checkbox" id="cf-spell-material"> M</label>
+                <input type="text" id="cf-spell-material-text" placeholder="material description" style="flex:1;display:none;">
+              </div>
             </div>
-          </div>
-
-          <div class="form-field">
-            <label for="cf-duration">Duration</label>
-            <input type="text" id="cf-duration" value="Instantaneous">
-          </div>
-
-          <div class="form-field">
-            <label>Components</label>
-            <div class="components-row">
-              <label><input type="checkbox" id="cf-verbal"> V</label>
-              <label><input type="checkbox" id="cf-somatic"> S</label>
-              <label><input type="checkbox" id="cf-material"> M</label>
-              <input type="text" id="cf-material-text" placeholder="material description" style="flex:1;display:none;">
-            </div>
-          </div>
-
-          <div class="form-field">
-            <label>Properties</label>
-            <div class="components-row">
-              <label><input type="checkbox" id="cf-concentration"> Concentration</label>
-              <label><input type="checkbox" id="cf-ritual"> Ritual</label>
-            </div>
-          </div>
-
-          <div class="form-field">
-            <label for="cf-desc">Description * <small style="font-variant:normal;font-size:7pt;">(supports **bold**, *italic*)</small></label>
-            <textarea id="cf-desc" placeholder="Describe the spell effect…" rows="4"></textarea>
-          </div>
-
-          <div class="form-field">
-            <label for="cf-higher">At Higher Levels / Cantrip Upgrades</label>
-            <textarea id="cf-higher" placeholder="Optional scaling text…" rows="2"></textarea>
-          </div>
-
-          <div class="form-row">
             <div class="form-field">
-              <label for="cf-class">Class (sets accent color)</label>
-              <select id="cf-class"></select>
+              <label>Properties</label>
+              <div class="components-row">
+                <label><input type="checkbox" id="cf-spell-concentration"> Concentration</label>
+                <label><input type="checkbox" id="cf-spell-ritual"> Ritual</label>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="cf-spell-desc">Description *</label>
+              <textarea id="cf-spell-desc" rows="4"></textarea>
+            </div>
+            <div class="form-field">
+              <label for="cf-spell-higher">At Higher Levels / Cantrip Upgrades</label>
+              <textarea id="cf-spell-higher" rows="2"></textarea>
+            </div>
+            <div class="form-field">
+              <label for="cf-spell-class">Class (accent)</label>
+              <select id="cf-spell-class"></select>
+            </div>
+          </div>
+
+          <!-- Class Skills -->
+          <div class="form-panel" data-form="class-skills" hidden>
+            <div class="form-field">
+              <label for="cf-skill-name">Feature Name *</label>
+              <input type="text" id="cf-skill-name" placeholder="Sneak Attack">
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-skill-class">Class</label>
+                <select id="cf-skill-class"></select>
+              </div>
+              <div class="form-field">
+                <label for="cf-skill-level">Level</label>
+                <input type="number" id="cf-skill-level" min="1" max="20" value="1">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="cf-skill-desc">Description *</label>
+              <textarea id="cf-skill-desc" rows="5"></textarea>
+            </div>
+          </div>
+
+          <!-- Feats -->
+          <div class="form-panel" data-form="feats" hidden>
+            <div class="form-field">
+              <label for="cf-feat-name">Feat Name *</label>
+              <input type="text" id="cf-feat-name">
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-feat-type">Type</label>
+                <input type="text" id="cf-feat-type" value="General">
+              </div>
+              <div class="form-field">
+                <label for="cf-feat-prereq">Prerequisite</label>
+                <input type="text" id="cf-feat-prereq">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="cf-feat-desc">Description / Benefits *</label>
+              <textarea id="cf-feat-desc" rows="5"></textarea>
+            </div>
+          </div>
+
+          <!-- Equipment -->
+          <div class="form-panel" data-form="equipment" hidden>
+            <div class="form-field">
+              <label for="cf-eq-name">Item Name *</label>
+              <input type="text" id="cf-eq-name">
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-eq-category">Category</label>
+                <input type="text" id="cf-eq-category" value="Adventuring Gear">
+              </div>
+              <div class="form-field">
+                <label for="cf-eq-cost">Cost</label>
+                <input type="text" id="cf-eq-cost" placeholder="25 gp">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="cf-eq-weight">Weight</label>
+              <input type="text" id="cf-eq-weight" placeholder="1 lb">
+            </div>
+            <div class="form-field">
+              <label for="cf-eq-desc">Description *</label>
+              <textarea id="cf-eq-desc" rows="4"></textarea>
+            </div>
+          </div>
+
+          <!-- Conditions -->
+          <div class="form-panel" data-form="conditions" hidden>
+            <div class="form-field">
+              <label for="cf-cond-name">Condition Name *</label>
+              <input type="text" id="cf-cond-name">
+            </div>
+            <div class="form-field">
+              <label for="cf-cond-desc">Description *</label>
+              <textarea id="cf-cond-desc" rows="5" placeholder="* Effect one&#10;* Effect two"></textarea>
+            </div>
+          </div>
+
+          <!-- Magic Items -->
+          <div class="form-panel" data-form="magic-items" hidden>
+            <div class="form-field">
+              <label for="cf-mi-name">Item Name *</label>
+              <input type="text" id="cf-mi-name">
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-mi-rarity">Rarity</label>
+                <select id="cf-mi-rarity">
+                  <option>Common</option>
+                  <option selected>Uncommon</option>
+                  <option>Rare</option>
+                  <option>Very Rare</option>
+                  <option>Legendary</option>
+                  <option>Artifact</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="cf-mi-category">Category</label>
+                <input type="text" id="cf-mi-category" value="Wondrous Item">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="cf-mi-attune">Attunement</label>
+              <input type="text" id="cf-mi-attune" value="No" placeholder="Yes (by a spellcaster)">
+            </div>
+            <div class="form-field">
+              <label for="cf-mi-desc">Description *</label>
+              <textarea id="cf-mi-desc" rows="4"></textarea>
+            </div>
+          </div>
+
+          <!-- Monsters -->
+          <div class="form-panel" data-form="monsters" hidden>
+            <div class="form-field">
+              <label for="cf-mon-name">Monster Name *</label>
+              <input type="text" id="cf-mon-name">
+            </div>
+            <div class="form-field">
+              <label for="cf-mon-typeline">Size / Type / Alignment</label>
+              <input type="text" id="cf-mon-typeline" placeholder="Medium Humanoid, neutral">
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-mon-cr">CR</label>
+                <input type="text" id="cf-mon-cr" placeholder="1">
+              </div>
+              <div class="form-field">
+                <label for="cf-mon-ac">AC</label>
+                <input type="text" id="cf-mon-ac" placeholder="15">
+              </div>
+              <div class="form-field">
+                <label for="cf-mon-hp">HP</label>
+                <input type="text" id="cf-mon-hp" placeholder="22">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="cf-mon-speed">Speed</label>
+              <input type="text" id="cf-mon-speed" value="30 feet">
+            </div>
+            <div class="form-row">
+              <div class="form-field"><label for="cf-mon-str">STR</label><input type="number" id="cf-mon-str" value="10"></div>
+              <div class="form-field"><label for="cf-mon-dex">DEX</label><input type="number" id="cf-mon-dex" value="10"></div>
+              <div class="form-field"><label for="cf-mon-con">CON</label><input type="number" id="cf-mon-con" value="10"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-field"><label for="cf-mon-int">INT</label><input type="number" id="cf-mon-int" value="10"></div>
+              <div class="form-field"><label for="cf-mon-wis">WIS</label><input type="number" id="cf-mon-wis" value="10"></div>
+              <div class="form-field"><label for="cf-mon-cha">CHA</label><input type="number" id="cf-mon-cha" value="10"></div>
+            </div>
+            <div class="form-field">
+              <label for="cf-mon-traits">Traits (blocks separated by blank line; first line = name)</label>
+              <textarea id="cf-mon-traits" rows="3"></textarea>
+            </div>
+            <div class="form-field">
+              <label for="cf-mon-actions">Actions</label>
+              <textarea id="cf-mon-actions" rows="3"></textarea>
             </div>
           </div>
 
           <div class="form-field">
             <label>Custom Accent Color Override</label>
             <div class="color-row">
-              <input type="checkbox" id="cf-color-override" style="accent-color:#9b6fd0;">
+              <input type="checkbox" id="cf-color-override">
               <label for="cf-color-override" style="font-size:9pt;cursor:pointer;">Use custom color</label>
-              <input type="color" id="cf-color" value="#5B2D82">
+              <input type="color" id="cf-color" value="#E34C38">
             </div>
           </div>
 
@@ -172,16 +326,13 @@
             <button class="btn" id="cf-submit" type="button">Add to Print Queue</button>
             <button class="btn btn-secondary" id="cf-clear" type="button">Clear</button>
           </div>
-
         </form>
-      </div><!-- /custom-form-wrap -->
+      </div>
+    </div>
 
-    </div><!-- /sidebar -->
-
-    <!-- ── Preview area ─────────────────────────────────────── -->
     <div class="preview-area">
       <div class="preview-empty" id="preview-empty">
-        Select spells and click Preview Cards
+        Select items and click Preview Cards
       </div>
       <p class="print-hint no-print" id="print-hint" hidden></p>
       <div id="print-area">
@@ -189,8 +340,7 @@
         <div class="card-sheet card-sheet-backs" id="card-sheet-backs"></div>
       </div>
     </div>
-
-  </div><!-- /main-layout -->
+  </div>
 
   <footer class="no-print" style="
     background:#2a1f14;
@@ -200,12 +350,11 @@
     color:#5a4a3a;
     text-align:right;
   ">
-    Spell data: <a href="https://open5e.com" target="_blank" style="color:#7a6858;">Open5e</a>
+    Data: <a href="https://open5e.com" target="_blank" style="color:#7a6858;">Open5e</a>
     · System Reference Document 5.2 (2024) · CC-BY 4.0
   </footer>
 
-</div><!-- /app -->
-
+</div>
 <script type="module" src="js/app.js"></script>
 </body>
 </html>
